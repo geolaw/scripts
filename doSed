@@ -1,0 +1,52 @@
+#!/bin/sh
+
+mode=$1
+shift
+sedfile=$1
+shift
+
+count=0
+while [ "$1" != "" ]; do
+    files[$count]=$1
+    shift
+    let "count=$count+1"
+done
+
+function do_usage {
+    
+    echo "doSed test/exe sedfile file"
+    if [ ! -z "$1" ]; then 
+        echo "    $1"
+        echo ""
+   fi
+   exit 0
+}
+
+if [ "$mode" != "test" ] && [ "$mode" != "exe" ]; then
+  do_usage "Unknown mode $mode"
+fi
+if [ "$sedfile" == "" ] || [ ! -e "$sedfile" ]; then
+  do_usage "sed file ($sedfile) not found"
+fi
+
+#if [ "$file" == "" ] || [ ! -e "$file" ]; then
+#  do_usage "file ($file) not found"
+#fi
+
+count2=0
+while [ $count2 -lt $count ]; do
+    echo "Processing file :${files[$count2]}"
+    if [ $mode == "test" ]; then
+
+        echo "running in test mode on $file.  < shows old lines, > shows new lines";
+        sed -f $sedfile ${files[$count2]} | diff ${files[$count2]} - 
+    else
+        tmpFile="/tmp/sed.$$"
+        echo "running is exe mode on $file.  "
+        sed -f $sedfile ${files[$count2]}  > $tmpFile
+        mv $tmpFile ${files[$count2]}
+    fi
+
+    let "count2=$count2+1"
+    echo "--------------------------------------------"
+done
