@@ -1,0 +1,2 @@
+#!/bin/bash
+HandBrakeCLI -b 1400 -r 25 -d  -R 48 -B 128 -i $1 -o $2
