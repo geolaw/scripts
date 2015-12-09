@@ -1,0 +1,9 @@
+[Nemo Action]
+Active=true
+Name=Comic Converter
+Comment=Comic Converter
+Quote=double
+Exec=/home/glaw/bin/cbr2cbz.sh "%F"
+Icon-Name=folder
+Selection=S
+Extensions=cbr
