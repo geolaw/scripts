@@ -1,0 +1,355 @@
+Start 11:25
+
+CENTOS 7 CWP install
+
+Spin up new DO centos 7 vm  - name with a fqdn 
+
+1. yum -y install wget && yum -y update
+[root@web3 ~]# yum -y install wget
+Loaded plugins: fastestmirror
+base                                                                           | 3.6 kB  00:00:00
+extras                                                                         | 3.4 kB  00:00:00
+updates                                                                        | 3.4 kB  00:00:00
+(1/4): extras/7/x86_64/primary_db                                              | 130 kB  00:00:00
+(2/4): base/7/x86_64/group_gz                                                  | 156 kB  00:00:01
+(3/4): updates/7/x86_64/primary_db                                             | 4.5 MB  00:00:00
+(4/4): base/7/x86_64/primary_db                                                | 5.7 MB  00:00:03
+Determining fastest mirrors
+ * base: mirrors.tripadvisor.com
+ * extras: mirror.solarvps.com
+ * updates: mirror.trouble-free.net
+Resolving Dependencies
+--> Running transaction check
+---> Package wget.x86_64 0:1.14-15.el7_4.1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+======================================================================================================
+ Package            Arch                 Version                          Repository             Size
+======================================================================================================
+Installing:
+ wget               x86_64               1.14-15.el7_4.1                  updates               547 k
+
+Transaction Summary
+======================================================================================================
+Install  1 Package
+
+Total download size: 547 k
+Installed size: 2.0 M
+Downloading packages:
+warning: /var/cache/yum/x86_64/7/updates/packages/wget-1.14-15.el7_4.1.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY
+Public key for wget-1.14-15.el7_4.1.x86_64.rpm is not installed
+wget-1.14-15.el7_4.1.x86_64.rpm                                                | 547 kB  00:00:00
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Importing GPG key 0xF4A80EB5:
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+ Package    : centos-release-7-4.1708.el7.centos.x86_64 (installed)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : wget-1.14-15.el7_4.1.x86_64                                                        1/1
+  Verifying  : wget-1.14-15.el7_4.1.x86_64                                                        1/1
+
+Installed:
+  wget.x86_64 0:1.14-15.el7_4.1
+
+Complete!
+[root@web3 ~]# yum -y install wget && yum -y update
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors.tripadvisor.com
+ * extras: mirror.solarvps.com
+ * updates: mirror.trouble-free.net
+Package wget-1.14-15.el7_4.1.x86_64 already installed and latest version
+Nothing to do
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors.tripadvisor.com
+ * extras: mirror.solarvps.com
+ * updates: mirror.trouble-free.net
+Resolving Dependencies
+--> Running transaction check
+---> Package bind-libs-lite.x86_64 32:9.9.4-51.el7 will be updated
+---> Package bind-libs-lite.x86_64 32:9.9.4-51.el7_4.1 will be an update
+---> Package bind-license.noarch 32:9.9.4-51.el7 will be updated
+---> Package bind-license.noarch 32:9.9.4-51.el7_4.1 will be an update
+---> Package cryptsetup-libs.x86_64 0:1.7.4-3.el7 will be updated
+---> Package cryptsetup-libs.x86_64 0:1.7.4-3.el7_4.1 will be an update
+---> Package curl.x86_64 0:7.29.0-42.el7 will be updated
+---> Package curl.x86_64 0:7.29.0-42.el7_4.1 will be an update
+---> Package glibc.x86_64 0:2.17-196.el7 will be updated
+---> Package glibc.x86_64 0:2.17-196.el7_4.2 will be an update
+---> Package glibc-common.x86_64 0:2.17-196.el7 will be updated
+---> Package glibc-common.x86_64 0:2.17-196.el7_4.2 will be an update
+---> Package kernel.x86_64 0:3.10.0-693.11.1.el7 will be installed
+--> Processing Dependency: linux-firmware >= 20170606-55 for package: kernel-3.10.0-693.11.1.el7.x86_64
+---> Package kernel-tools.x86_64 0:3.10.0-693.5.2.el7 will be updated
+---> Package kernel-tools.x86_64 0:3.10.0-693.11.1.el7 will be an update
+---> Package kernel-tools-libs.x86_64 0:3.10.0-693.5.2.el7 will be updated
+---> Package kernel-tools-libs.x86_64 0:3.10.0-693.11.1.el7 will be an update
+---> Package kmod.x86_64 0:20-15.el7_4.4 will be updated
+---> Package kmod.x86_64 0:20-15.el7_4.6 will be an update
+---> Package kmod-libs.x86_64 0:20-15.el7_4.4 will be updated
+---> Package kmod-libs.x86_64 0:20-15.el7_4.6 will be an update
+---> Package libblkid.x86_64 0:2.23.2-43.el7 will be updated
+---> Package libblkid.x86_64 0:2.23.2-43.el7_4.2 will be an update
+---> Package libcurl.x86_64 0:7.29.0-42.el7 will be updated
+---> Package libcurl.x86_64 0:7.29.0-42.el7_4.1 will be an update
+---> Package libgcc.x86_64 0:4.8.5-16.el7 will be updated
+---> Package libgcc.x86_64 0:4.8.5-16.el7_4.1 will be an update
+---> Package libgomp.x86_64 0:4.8.5-16.el7 will be updated
+---> Package libgomp.x86_64 0:4.8.5-16.el7_4.1 will be an update
+---> Package libmount.x86_64 0:2.23.2-43.el7 will be updated
+---> Package libmount.x86_64 0:2.23.2-43.el7_4.2 will be an update
+---> Package libstdc++.x86_64 0:4.8.5-16.el7 will be updated
+---> Package libstdc++.x86_64 0:4.8.5-16.el7_4.1 will be an update
+---> Package libuuid.x86_64 0:2.23.2-43.el7 will be updated
+---> Package libuuid.x86_64 0:2.23.2-43.el7_4.2 will be an update
+---> Package python-perf.x86_64 0:3.10.0-693.5.2.el7 will be updated
+---> Package python-perf.x86_64 0:3.10.0-693.11.1.el7 will be an update
+---> Package selinux-policy.noarch 0:3.13.1-166.el7_4.5 will be updated
+---> Package selinux-policy.noarch 0:3.13.1-166.el7_4.7 will be an update
+---> Package selinux-policy-targeted.noarch 0:3.13.1-166.el7_4.5 will be updated
+---> Package selinux-policy-targeted.noarch 0:3.13.1-166.el7_4.7 will be an update
+---> Package util-linux.x86_64 0:2.23.2-43.el7 will be updated
+---> Package util-linux.x86_64 0:2.23.2-43.el7_4.2 will be an update
+--> Running transaction check
+---> Package linux-firmware.noarch 0:20170606-56.gitc990aae.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+======================================================================================================
+ Package                        Arch          Version                            Repository      Size
+======================================================================================================
+Installing:
+ kernel                         x86_64        3.10.0-693.11.1.el7                updates         43 M
+Updating:
+ bind-libs-lite                 x86_64        32:9.9.4-51.el7_4.1                updates        733 k
+ bind-license                   noarch        32:9.9.4-51.el7_4.1                updates         84 k
+ cryptsetup-libs                x86_64        1.7.4-3.el7_4.1                    updates        223 k
+ curl                           x86_64        7.29.0-42.el7_4.1                  updates        267 k
+ glibc                          x86_64        2.17-196.el7_4.2                   updates        3.6 M
+ glibc-common                   x86_64        2.17-196.el7_4.2                   updates         11 M
+ kernel-tools                   x86_64        3.10.0-693.11.1.el7                updates        5.1 M
+ kernel-tools-libs              x86_64        3.10.0-693.11.1.el7                updates        5.0 M
+ kmod                           x86_64        20-15.el7_4.6                      updates        120 k
+ kmod-libs                      x86_64        20-15.el7_4.6                      updates         50 k
+ libblkid                       x86_64        2.23.2-43.el7_4.2                  updates        176 k
+ libcurl                        x86_64        7.29.0-42.el7_4.1                  updates        219 k
+ libgcc                         x86_64        4.8.5-16.el7_4.1                   updates         98 k
+ libgomp                        x86_64        4.8.5-16.el7_4.1                   updates        154 k
+ libmount                       x86_64        2.23.2-43.el7_4.2                  updates        178 k
+ libstdc++                      x86_64        4.8.5-16.el7_4.1                   updates        301 k
+ libuuid                        x86_64        2.23.2-43.el7_4.2                  updates         79 k
+ python-perf                    x86_64        3.10.0-693.11.1.el7                updates        5.1 M
+ selinux-policy                 noarch        3.13.1-166.el7_4.7                 updates        437 k
+ selinux-policy-targeted        noarch        3.13.1-166.el7_4.7                 updates        6.5 M
+ util-linux                     x86_64        2.23.2-43.el7_4.2                  updates        2.0 M
+Installing for dependencies:
+ linux-firmware                 noarch        20170606-56.gitc990aae.el7         base            35 M
+
+Transaction Summary
+======================================================================================================
+Install   1 Package  (+1 Dependent package)
+Upgrade  21 Packages
+
+Total download size: 120 M
+Downloading packages:
+Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+(1/23): bind-license-9.9.4-51.el7_4.1.noarch.rpm                               |  84 kB  00:00:00
+(2/23): cryptsetup-libs-1.7.4-3.el7_4.1.x86_64.rpm                             | 223 kB  00:00:00
+(3/23): bind-libs-lite-9.9.4-51.el7_4.1.x86_64.rpm                             | 733 kB  00:00:00
+(4/23): curl-7.29.0-42.el7_4.1.x86_64.rpm                                      | 267 kB  00:00:00
+(5/23): glibc-2.17-196.el7_4.2.x86_64.rpm                                      | 3.6 MB  00:00:00
+(6/23): glibc-common-2.17-196.el7_4.2.x86_64.rpm                               |  11 MB  00:00:00
+(7/23): kernel-tools-3.10.0-693.11.1.el7.x86_64.rpm                            | 5.1 MB  00:00:00
+(8/23): kernel-tools-libs-3.10.0-693.11.1.el7.x86_64.rpm                       | 5.0 MB  00:00:00
+(9/23): kmod-20-15.el7_4.6.x86_64.rpm                                          | 120 kB  00:00:00
+(10/23): kmod-libs-20-15.el7_4.6.x86_64.rpm                                    |  50 kB  00:00:00
+(11/23): libblkid-2.23.2-43.el7_4.2.x86_64.rpm                                 | 176 kB  00:00:00
+(12/23): libcurl-7.29.0-42.el7_4.1.x86_64.rpm                                  | 219 kB  00:00:00
+(13/23): libgcc-4.8.5-16.el7_4.1.x86_64.rpm                                    |  98 kB  00:00:00
+(14/23): libgomp-4.8.5-16.el7_4.1.x86_64.rpm                                   | 154 kB  00:00:00
+(15/23): libmount-2.23.2-43.el7_4.2.x86_64.rpm                                 | 178 kB  00:00:00
+(16/23): libstdc++-4.8.5-16.el7_4.1.x86_64.rpm                                 | 301 kB  00:00:00
+(17/23): libuuid-2.23.2-43.el7_4.2.x86_64.rpm                                  |  79 kB  00:00:00
+(18/23): python-perf-3.10.0-693.11.1.el7.x86_64.rpm                            | 5.1 MB  00:00:00
+(19/23): selinux-policy-3.13.1-166.el7_4.7.noarch.rpm                          | 437 kB  00:00:00
+(20/23): selinux-policy-targeted-3.13.1-166.el7_4.7.noarch.rpm                 | 6.5 MB  00:00:00
+(21/23): util-linux-2.23.2-43.el7_4.2.x86_64.rpm                               | 2.0 MB  00:00:00
+(22/23): kernel-3.10.0-693.11.1.el7.x86_64.rpm                                 |  43 MB  00:00:02
+(23/23): linux-firmware-20170606-56.gitc990aae.el7.noarch.rpm                  |  35 MB  00:02:01
+------------------------------------------------------------------------------------------------------
+Total                                                                 1.0 MB/s | 120 MB  00:02:02
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Updating   : libgcc-4.8.5-16.el7_4.1.x86_64                                                    1/44
+  Updating   : glibc-common-2.17-196.el7_4.2.x86_64                                              2/44
+  Updating   : glibc-2.17-196.el7_4.2.x86_64                                                     3/44
+  Updating   : libuuid-2.23.2-43.el7_4.2.x86_64                                                  4/44
+  Updating   : libblkid-2.23.2-43.el7_4.2.x86_64                                                 5/44
+  Updating   : libmount-2.23.2-43.el7_4.2.x86_64                                                 6/44
+  Updating   : libcurl-7.29.0-42.el7_4.1.x86_64                                                  7/44
+  Updating   : kmod-20-15.el7_4.6.x86_64                                                         8/44
+  Updating   : kernel-tools-libs-3.10.0-693.11.1.el7.x86_64                                      9/44
+  Updating   : selinux-policy-3.13.1-166.el7_4.7.noarch                                         10/44
+  Installing : linux-firmware-20170606-56.gitc990aae.el7.noarch                                 11/44
+  Updating   : 32:bind-license-9.9.4-51.el7_4.1.noarch                                          12/44
+  Updating   : 32:bind-libs-lite-9.9.4-51.el7_4.1.x86_64                                        13/44
+  Installing : kernel-3.10.0-693.11.1.el7.x86_64                                                14/44
+  Updating   : selinux-policy-targeted-3.13.1-166.el7_4.7.noarch                                15/44
+  Updating   : kernel-tools-3.10.0-693.11.1.el7.x86_64                                          16/44
+  Updating   : curl-7.29.0-42.el7_4.1.x86_64                                                    17/44
+  Updating   : util-linux-2.23.2-43.el7_4.2.x86_64                                              18/44
+  Updating   : cryptsetup-libs-1.7.4-3.el7_4.1.x86_64                                           19/44
+  Updating   : libgomp-4.8.5-16.el7_4.1.x86_64                                                  20/44
+  Updating   : kmod-libs-20-15.el7_4.6.x86_64                                                   21/44
+  Updating   : python-perf-3.10.0-693.11.1.el7.x86_64                                           22/44
+  Updating   : libstdc++-4.8.5-16.el7_4.1.x86_64                                                23/44
+  Cleanup    : util-linux-2.23.2-43.el7.x86_64                                                  24/44
+  Cleanup    : libmount-2.23.2-43.el7.x86_64                                                    25/44
+  Cleanup    : kernel-tools-3.10.0-693.5.2.el7.x86_64                                           26/44
+  Cleanup    : libblkid-2.23.2-43.el7.x86_64                                                    27/44
+  Cleanup    : cryptsetup-libs-1.7.4-3.el7.x86_64                                               28/44
+  Cleanup    : libstdc++-4.8.5-16.el7.x86_64                                                    29/44
+  Cleanup    : kmod-libs-20-15.el7_4.4.x86_64                                                   30/44
+  Cleanup    : kmod-20-15.el7_4.4.x86_64                                                        31/44
+  Cleanup    : curl-7.29.0-42.el7.x86_64                                                        32/44
+  Cleanup    : 32:bind-libs-lite-9.9.4-51.el7.x86_64                                            33/44
+  Cleanup    : selinux-policy-targeted-3.13.1-166.el7_4.5.noarch                                34/44
+  Cleanup    : libcurl-7.29.0-42.el7.x86_64                                                     35/44
+  Cleanup    : libuuid-2.23.2-43.el7.x86_64                                                     36/44
+  Cleanup    : kernel-tools-libs-3.10.0-693.5.2.el7.x86_64                                      37/44
+  Cleanup    : python-perf-3.10.0-693.5.2.el7.x86_64                                            38/44
+  Cleanup    : libgomp-4.8.5-16.el7.x86_64                                                      39/44
+  Cleanup    : selinux-policy-3.13.1-166.el7_4.5.noarch                                         40/44
+  Cleanup    : 32:bind-license-9.9.4-51.el7.noarch                                              41/44
+  Cleanup    : glibc-common-2.17-196.el7.x86_64                                                 42/44
+  Cleanup    : glibc-2.17-196.el7.x86_64                                                        43/44
+  Cleanup    : libgcc-4.8.5-16.el7.x86_64                                                       44/44
+  Verifying  : libmount-2.23.2-43.el7_4.2.x86_64                                                 1/44
+  Verifying  : kernel-tools-3.10.0-693.11.1.el7.x86_64                                           2/44
+  Verifying  : 32:bind-libs-lite-9.9.4-51.el7_4.1.x86_64                                         3/44
+  Verifying  : kernel-3.10.0-693.11.1.el7.x86_64                                                 4/44
+  Verifying  : curl-7.29.0-42.el7_4.1.x86_64                                                     5/44
+  Verifying  : libcurl-7.29.0-42.el7_4.1.x86_64                                                  6/44
+  Verifying  : util-linux-2.23.2-43.el7_4.2.x86_64                                               7/44
+  Verifying  : libgomp-4.8.5-16.el7_4.1.x86_64                                                   8/44
+  Verifying  : kmod-20-15.el7_4.6.x86_64                                                         9/44
+  Verifying  : libgcc-4.8.5-16.el7_4.1.x86_64                                                   10/44
+  Verifying  : 32:bind-license-9.9.4-51.el7_4.1.noarch                                          11/44
+  Verifying  : linux-firmware-20170606-56.gitc990aae.el7.noarch                                 12/44
+  Verifying  : selinux-policy-3.13.1-166.el7_4.7.noarch                                         13/44
+  Verifying  : selinux-policy-targeted-3.13.1-166.el7_4.7.noarch                                14/44
+  Verifying  : kmod-libs-20-15.el7_4.6.x86_64                                                   15/44
+  Verifying  : python-perf-3.10.0-693.11.1.el7.x86_64                                           16/44
+  Verifying  : libblkid-2.23.2-43.el7_4.2.x86_64                                                17/44
+  Verifying  : libstdc++-4.8.5-16.el7_4.1.x86_64                                                18/44
+  Verifying  : cryptsetup-libs-1.7.4-3.el7_4.1.x86_64                                           19/44
+  Verifying  : kernel-tools-libs-3.10.0-693.11.1.el7.x86_64                                     20/44
+  Verifying  : glibc-2.17-196.el7_4.2.x86_64                                                    21/44
+  Verifying  : glibc-common-2.17-196.el7_4.2.x86_64                                             22/44
+  Verifying  : libuuid-2.23.2-43.el7_4.2.x86_64                                                 23/44
+  Verifying  : 32:bind-libs-lite-9.9.4-51.el7.x86_64                                            24/44
+  Verifying  : libcurl-7.29.0-42.el7.x86_64                                                     25/44
+  Verifying  : libuuid-2.23.2-43.el7.x86_64                                                     26/44
+  Verifying  : libgcc-4.8.5-16.el7.x86_64                                                       27/44
+  Verifying  : cryptsetup-libs-1.7.4-3.el7.x86_64                                               28/44
+  Verifying  : 32:bind-license-9.9.4-51.el7.noarch                                              29/44
+  Verifying  : libstdc++-4.8.5-16.el7.x86_64                                                    30/44
+  Verifying  : curl-7.29.0-42.el7.x86_64                                                        31/44
+  Verifying  : selinux-policy-targeted-3.13.1-166.el7_4.5.noarch                                32/44
+  Verifying  : libgomp-4.8.5-16.el7.x86_64                                                      33/44
+  Verifying  : kernel-tools-3.10.0-693.5.2.el7.x86_64                                           34/44
+  Verifying  : kmod-libs-20-15.el7_4.4.x86_64                                                   35/44
+  Verifying  : libblkid-2.23.2-43.el7.x86_64                                                    36/44
+  Verifying  : util-linux-2.23.2-43.el7.x86_64                                                  37/44
+  Verifying  : kernel-tools-libs-3.10.0-693.5.2.el7.x86_64                                      38/44
+  Verifying  : selinux-policy-3.13.1-166.el7_4.5.noarch                                         39/44
+  Verifying  : kmod-20-15.el7_4.4.x86_64                                                        40/44
+  Verifying  : libmount-2.23.2-43.el7.x86_64                                                    41/44
+  Verifying  : python-perf-3.10.0-693.5.2.el7.x86_64                                            42/44
+  Verifying  : glibc-common-2.17-196.el7.x86_64                                                 43/44
+  Verifying  : glibc-2.17-196.el7.x86_64                                                        44/44
+
+Installed:
+  kernel.x86_64 0:3.10.0-693.11.1.el7
+
+Dependency Installed:
+  linux-firmware.noarch 0:20170606-56.gitc990aae.el7
+
+Updated:
+  bind-libs-lite.x86_64 32:9.9.4-51.el7_4.1     bind-license.noarch 32:9.9.4-51.el7_4.1
+  cryptsetup-libs.x86_64 0:1.7.4-3.el7_4.1      curl.x86_64 0:7.29.0-42.el7_4.1
+  glibc.x86_64 0:2.17-196.el7_4.2               glibc-common.x86_64 0:2.17-196.el7_4.2
+  kernel-tools.x86_64 0:3.10.0-693.11.1.el7     kernel-tools-libs.x86_64 0:3.10.0-693.11.1.el7
+  kmod.x86_64 0:20-15.el7_4.6                   kmod-libs.x86_64 0:20-15.el7_4.6
+  libblkid.x86_64 0:2.23.2-43.el7_4.2           libcurl.x86_64 0:7.29.0-42.el7_4.1
+  libgcc.x86_64 0:4.8.5-16.el7_4.1              libgomp.x86_64 0:4.8.5-16.el7_4.1
+  libmount.x86_64 0:2.23.2-43.el7_4.2           libstdc++.x86_64 0:4.8.5-16.el7_4.1
+  libuuid.x86_64 0:2.23.2-43.el7_4.2            python-perf.x86_64 0:3.10.0-693.11.1.el7
+  selinux-policy.noarch 0:3.13.1-166.el7_4.7    selinux-policy-targeted.noarch 0:3.13.1-166.el7_4.7
+  util-linux.x86_64 0:2.23.2-43.el7_4.2
+
+Complete!
+
+2. reboot
+3. cd /usr/local/src && wget http://centos-webpanel.com/cwp-el7-latest  && sh cwp-el7-latest
+Start about 11:32 ...
+runs for about 7 minutes
+
+11:40 done 
+#############################
+#      CWP Installed        #
+#############################
+
+go to CentOS WebPanel Admin GUI at http://SERVER_IP:2030/
+
+http://138.197.14.135:2030
+SSL: https://138.197.14.135:2031
+---------------------
+Username: root
+Password: ssh server root password
+MySQL root Password: KXLRi962mZcl
+
+#########################################################
+          CentOS Web Panel MailServer Installer
+#########################################################
+SSL Cert name (hostname): web3.geolaw.com
+SSL Cert file location /etc/pki/tls/ private|certs
+#########################################################
+
+visit for help: www.centos-webpanel.com
+Write down login details and press ENTER for server reboot!
+Press ENTER for server reboot!
+
+ctrl-z 
+passwd root
+XXXXX
+
+4. reboot
+
+5.0 add new to geolaw.com zone at godaddy with server ip
+
+5.1 create new account 
+User accounts -> New accounts
+domain:uclugtest.com
+user:uclug
+AutoSSL checked ... no manual config for Let's encrypt
+
+6. Tweak out the default index.html created by CWP
+
+echo "Hello UCLUG" > /home/uclug2/public_html/index.html
+
+7.. on local machine, add /etc/hosts entry for the DO vps for www.uclugtest.com uclugtest.com
+138.197.14.135 uclug.geolaw.com
+
+8. go to http://uclug.geolaw.com
+
