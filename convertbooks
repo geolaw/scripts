@@ -1,0 +1,26 @@
+#!/bin/bash 
+IFS="$(printf '\n')" 
+cd /Downloads/complete/Books
+
+
+# finds azw3 books and converts them to epub .. should be easy to extend to mobi, etc
+
+find . -name "*.azw3" |while read book; do
+	echo "Converting ---($book)----"; 
+	echo $book |grep / > /dev/null
+	if [ "$?" == "1" ]; then
+		echo "No direcory - convert in same dir"
+		d=`echo $book |sed 's/azw3/epub/g'`
+		echo "input is $book  output is :$d"
+		ebook-convert "$book" "$d"
+	else 
+	echo "$book contains a directory"
+		dir=`echo $book |awk -F/ '{print $2}'`
+		file=`echo $book |awk -F/ '{print $3}'|sed 's/azw3/epub/g'`
+		ebook-convert "$book" "$file"
+		if [ "$?" == "0" ]; then
+			rm -rf $dir
+		fi
+	fi
+done
+

@@ -1,0 +1,49 @@
+#!/bin/bash 
+
+# (C) George Law 2017
+# search the calibre db and output the meta data for any patches 
+# currently assumes  the $2 is a value search field, ie - title, author
+# to do - add additional error checking to make sure we get valid inputs
+
+# first param is books or other - which selects the proper library
+# books runs into the public library under /Downloads/Calibre Library
+# books2 (or anything other than books) searches the docker server under /Downloads/Calibre Library2
+# always uses the username/pw although the public does not need it
+
+if [ "$1" == "books" ]; then
+    library='http://127.0.0.1:8080/#Calibre_Library' 
+else 
+    library='http://127.0.0.1:8081/#library' 
+fi
+
+
+ids=$(calibredb --username=geolaw --password=aslan412 search $2:"$3" --library-path $library)
+# test to make sure we either got a comma list of book ids or a single value
+echo $ids |grep ,  > /dev/null
+if [ "$?" == "1" ]; then
+    #echo "$id is not a csv list checking to see if its a single number"
+    re='^[0-9]+$'
+    if ! [[ $t =~ $re ]] ; then
+        # if we get here, $ids is not a single number or a comma separated list - it would be the "not found" message
+        echo "$ids"
+        exit
+    fi
+fi
+
+for id in $( echo $ids |sed 's/,/ /g' ); do 
+        IFS="$(printf '\n')" 
+        echo "Book id $id"
+		bookinfo=$(calibredb --username=xxxxxx --password=xxxxxx show_metadata $id --library-path $library)
+        for line in $( echo $bookinfo); do
+            # pipe the comment to lynx to get it "htmlized" 
+            echo $line |grep Comment > /dev/null
+            if [ "$?" == "1" ]; then
+                echo $line;
+            else 
+                echo
+                echo $line  |  lynx -dump -stdin
+            fi
+        done
+        echo '---------------------------------------------';
+        echo
+done

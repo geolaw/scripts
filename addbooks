@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# monitors my usenet sabnzbdplus download directories for new books and adds them to the appropriate calibre library
+# 2 libraries running, one is public on /Downloads/Calibre Library, the other is private on /Downloads/Calibre Library2
+# second library runs within a docker container and is password protected
+
+
+# first check for public books 
+#check for a running calibre-server process
+ps -elfwwww |grep calibre-server|grep -v grep > /dev/null
+if [ "$?" == "1" ]; then
+# calibre not running
+	echo "Calibre main server not running"
+else
+
+    #add and then delete the books
+	calibredb add -r /Downloads/complete/Books/   --library-path http://127.0.0.1:8080/#Calibre_Library 2>&1  >> /Downloads/books.log
+	cd /Downloads/complete/Books/
+	rm -rf *
+fi
+
+# check for running docker instance of calibre 
+sudo docker ps |grep calibre |grep -v grep > /dev/null
+if [ "$?" == "1" ]; then
+	# calibre not running
+	echo "calibre docker not running"
+else 
+    # add the book using the authenticated user, then delete
+	calibredb --username=xxxxxx --password=xxxxxx add  -r /Downloads/complete/Books2/ --library-path http://127.0.0.1:8081/#library
+	cd /Downloads/complete/Books2/
+	rm -rf *
+fi
