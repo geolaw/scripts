@@ -1,10 +1,11 @@
-Start 11:25
-
 CENTOS 7 CWP install
 
-Spin up new DO centos 7 vm  - name with a fqdn 
+1. Spin up new DO centos 7 vm  - name with a fqdn 
+2. Adding to DNS so we can validate new website later on
 
-1. yum -y install wget && yum -y update
+
+3. first make sure wget is present and update the base OS
+yum -y install wget && yum -y update
 [root@web3 ~]# yum -y install wget
 Loaded plugins: fastestmirror
 base                                                                           | 3.6 kB  00:00:00
@@ -300,8 +301,10 @@ Updated:
 
 Complete!
 
-2. reboot
-3. cd /usr/local/src && wget http://centos-webpanel.com/cwp-el7-latest  && sh cwp-el7-latest
+4. reboot
+5. grab the cwp install script and run it - it does all the work
+
+cd /usr/local/src && wget http://centos-webpanel.com/cwp-el7-latest  && sh cwp-el7-latest
 Start about 11:32 ...
 runs for about 7 minutes
 
@@ -330,26 +333,24 @@ visit for help: www.centos-webpanel.com
 Write down login details and press ENTER for server reboot!
 Press ENTER for server reboot!
 
-ctrl-z 
+6. I do a ctrl-z  here to drop to a shell and set my root PW
 passwd root
 XXXXX
 
-4. reboot
+7. jump back to the forground to finish the installer and reboot
+# fg - press enter to reboot
 
-5.0 add new to geolaw.com zone at godaddy with server ip
-
-5.1 create new account 
+8 create new account 
 User accounts -> New accounts
-domain:uclugtest.com
+domain:uclug.geolaw.com
 user:uclug
 AutoSSL checked ... no manual config for Let's encrypt
 
-6. Tweak out the default index.html created by CWP
+9. Tweak out the default index.html created by CWP
 
 echo "Hello UCLUG" > /home/uclug2/public_html/index.html
 
-7.. on local machine, add /etc/hosts entry for the DO vps for www.uclugtest.com uclugtest.com
-138.197.14.135 uclug.geolaw.com
 
-8. go to http://uclug.geolaw.com
+10. go to https://uclug.geolaw.com
+
 
