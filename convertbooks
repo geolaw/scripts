@@ -1,6 +1,10 @@
 #!/bin/bash 
+
+# (C) George Law 2017
+
 IFS="$(printf '\n')" 
 cd /Downloads/complete/Books
+
 
 
 # finds azw3 books and converts them to epub .. should be easy to extend to mobi, etc
