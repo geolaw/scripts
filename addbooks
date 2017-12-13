@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# (C) George Law 2017
+
 # monitors my usenet sabnzbdplus download directories for new books and adds them to the appropriate calibre library
 # 2 libraries running, one is public on /Downloads/Calibre Library, the other is private on /Downloads/Calibre Library2
 # second library runs within a docker container and is password protected
@@ -30,3 +32,4 @@ else
 	cd /Downloads/complete/Books2/
 	rm -rf *
 fi
+
