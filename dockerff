@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# borrowed from online sources  - lost in my firefox history somewhere.
+# this script will launch a docker container using the ugrawert/firefox-java base image
+# and go to the passed URL.
+
+# useful when needing an old version of firefox with java to access a server's management console
+
+URL=$1
+if [ "$1" == "" ]; then
+    URL='http://google.com'
+fi
+#https://192.168.29.4/;
+docker run --rm -ti \
+           -v "$PWD/.ff_profile:/home/glaw/.mozilla/firefox" \
+           -v "${HOME}/Downloads:/home/glaw/Downloads:rw" \
+           -v "/tmp/.X11-unix:/tmp/.X11-unix" \
+           -e "DISPLAY=unix${DISPLAY}" \
+           -e "uid=$(id -u)" \
+           -e "gid=$(id -g)" \
+           -e "URL=${URL}" \
+           ugrawert/firefox-java

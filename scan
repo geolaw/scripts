@@ -1,0 +1,21 @@
+#!/bin/bash
+if [ "$1" == "" ]; then
+    target="scan_"$(date +"%m-%d-%Y-%H%M%S")".png"
+else
+    target="$1.png"
+fi
+
+targetpdf=`echo $target | sed "s/png/pdf/"`
+#echo $target
+dest=/Downloads/Pictures/Scans/$target
+destpdf=/Downloads/Pictures/Scans/$targetpdf
+scanimage --resolution 600 --mode Lineart -d "pixma:MG2900_192.168.29.92"  -p -o  $dest --format png
+if [ "$?" == "1" ]; then
+    echo "Scan failed!"
+    exit;
+fi
+echo "Saved scan to $dest"
+echo  "Converting to pdf"
+/usr/bin/convert $dest $destpdf
+ls -la  $dest $destpdf
+#device `pixma:MG2900_192.168.29.94' is a CANON Canon PIXMA MG2900 Series multi-function peripheral
