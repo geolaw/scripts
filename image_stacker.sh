@@ -129,4 +129,4 @@ if [ "$?" == "0" ]; then
     rm $newvid
 fi
 ls -la $newname
-feh $newname
+#feh $newname
