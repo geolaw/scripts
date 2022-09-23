@@ -5,7 +5,11 @@
 # randomizes music playback
 
 IFS="$(printf '\n\t')"
+
+# variables
+PLAYER="mpv"
 MUSIC="/Music/Music"
+
 cd $MUSIC
 back_to_root=0
 
@@ -33,7 +37,7 @@ while [ 1 ]; do
 			back_to_root=1  # flag to track position
 		else
 			# play dir
-			mpv $dir
+			$PLAYER $dir
 			# if back_to_root is set, we cd back to the top and restart with another artist
 			if [ "$back_to_root" == "1" ]; then
 				cd $MUSIC

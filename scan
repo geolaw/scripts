@@ -1,4 +1,12 @@
 #!/bin/bash
+
+# {c} GEL 2022
+# scan from remove canon pixma scanner from the command line
+# Setup - add the following line (uncommented) to /etc/sane.d/pixma.conf
+# bjnp://192.168.29.94  # IP address of the scanner/printer
+
+#device `pixma:MG2900_192.168.29.94' is a CANON Canon PIXMA MG2900 Series multi-function peripheral
+
 if [ "$1" == "" ]; then
     target="scan_"$(date +"%m-%d-%Y-%H%M%S")".png"
 else
@@ -18,4 +26,4 @@ echo "Saved scan to $dest"
 echo  "Converting to pdf"
 /usr/bin/convert $dest $destpdf
 ls -la  $dest $destpdf
-#device `pixma:MG2900_192.168.29.94' is a CANON Canon PIXMA MG2900 Series multi-function peripheral
+
