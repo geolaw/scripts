@@ -1,0 +1,57 @@
+#!/bin/bash
+
+IFS="$(printf '\n\t')"
+# $1 = source
+# $2 = dest
+
+base_dir="/Downloads/libvirt_images"
+cd $base_dir
+
+# validate $1
+virsh list --all |grep template |grep $1 > /dev/null
+if [ "$?" == "1" ]; then
+    echo "Template $1 does not exist. Templates should have dashes and not _"
+    exit
+fi
+
+echo $2 |grep '_' > /dev/null
+if [ "$?" == "0" ]; then
+    echo "destination VM names should have dashes and not _"
+    exit
+fi
+
+# first make a new directory for the vms disks - this colsolidates them all to keep them together
+mkdir $2
+# the virsh clone command produces the disks in the same directory so we cd there second
+cd $2
+
+echo "Working directory is `pwd`"
+
+# based on the number of disks in $1 vm, need to create a virt-clone command to name that many new disks for the new vm we are cloning.
+
+# assumptions
+# -- ALL disks reside in the same directory
+# -- cd to the directory where the disk images should be created
+# -- using the source from dumpxml, the virt-clone command gets created with the full path to all disk files
+#
+# virt-clone --original rhcs50-node01 --name rhcs50-admin --file /path/to/vms/$2/rhcs50-admin1.qcow2 --file /path/to/vms/$2/rhcs50-admin2.qcow2 --file /path/to/vms/$2/rhcs50-admin3.qcow2 --file /path/to/vms/$2/rhcs50-admin4.qcow2
+
+# need to dynamically figure out how many disks we need based on the original vm
+#echo "Source vm $1 original disks :"
+#virsh dumpxml $1 |grep 'source file.*qcow'
+cmd_string="virt-clone --original $1 --name $2 "
+for i in $(virsh dumpxml $1 |grep 'source file.*qcow'); do
+    new=$(echo $i|sed "s/.*'\(\/Downloads\/libvirt_images.*\)'.*/\1/" | sed "s/$1/$2/g")
+    #new=$(echo $i|sed "s/.*'\(/Downlads/libvirt_images.*\)'.*/\1/"|sed "s/$1/$2/g")
+    cmd_string="$cmd_string --file $new"
+done
+
+#num_disks=$(virsh dumpxml $1 |grep 'source file.*qcow' |wc -l);
+#disk_string=""
+#for (( c=1; c<=$num_disks; c++ )); do
+#    #for i in {seq 1 $num_disks}; do
+#    disk_string+=" --file $2_$c.qcow2"
+#done
+#echo "$cmd_string"
+eval $cmd_string
+#virt-clone --original "$1" --name "$2" "$disk_string"
