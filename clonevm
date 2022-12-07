@@ -3,10 +3,25 @@
 IFS="$(printf '\n\t')"
 # $1 = source
 # $2 = dest
+error=0
+if [ "$1" == "" ]; then
+    error=1
+    error_str="Source vm name is required.  "
+    error_str+="Available templates are : $(virsh list --all |grep template |awk '{print $2}') "
+fi
+if [ "$2" == "" ]; then
+    error=1
+    error_str+="Destination vm name is required"
+fi
+
+if [ $error -gt 0 ]; then
+    echo $error_str
+    exit;
+fi
+
 
 base_dir="/Downloads/libvirt_images"
 cd $base_dir
-
 # validate $1
 virsh list --all |grep template |grep $1 > /dev/null
 if [ "$?" == "1" ]; then
@@ -14,6 +29,12 @@ if [ "$?" == "1" ]; then
     exit
 fi
 
+# if $3 is set, make it first, then cd into it.
+# e.g. $3 = testcluster, we want /Downloads/images/testcluster/vm_name
+if [ "$3" != "" ]; then
+    mkdir $3
+    cd $3
+fi
 echo $2 |grep '_' > /dev/null
 if [ "$?" == "0" ]; then
     echo "destination VM names should have dashes and not _"
@@ -41,8 +62,15 @@ echo "Working directory is `pwd`"
 #virsh dumpxml $1 |grep 'source file.*qcow'
 cmd_string="virt-clone --original $1 --name $2 "
 for i in $(virsh dumpxml $1 |grep 'source file.*qcow'); do
-    new=$(echo $i|sed "s/.*'\(\/Downloads\/libvirt_images.*\)'.*/\1/" | sed "s/$1/$2/g")
+    new=$(echo $i|sed "s/.*'\(\/Downloads\/libvirt_images.*\)'.*/\1/" | sed "s%$1%$2%g")
+    if [ "$3" != "" ]; then
+        # do an additional sed, change the first occurance to $3/$2/
+    # /Downloads/libvirt_images/rhel86-test-node01/rhel86-test-node01-root.qcow2
+        new=$(echo $new | sed "s/$2/$3\/$2/");
+    fi
+    # /Downloads/libvirt_images/test/rhel86-test-node01/rhel86-test-node01-root.qcow2
     #new=$(echo $i|sed "s/.*'\(/Downlads/libvirt_images.*\)'.*/\1/"|sed "s/$1/$2/g")
+    echo $new
     cmd_string="$cmd_string --file $new"
 done
 
