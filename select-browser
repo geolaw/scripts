@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# based originally on https://unix.stackexchange.com/questions/487203/choose-which-browser-to-open-link-in/581107#581107
+# modified to allow for certain sites to always open with FF, others with chrome, and then show the pop up to select for the test
+
+case $* in
+    *webex*|*meet.google.com*|*google.com/calendar*)
+	google-chrome $* &
+	;;
+    *ibmsf*|https://gss*force.com*)
+	firefox $* &
+	;;
+    *)
+	BROWSER=$(zenity --list --radiolist --text '' --column='check' --column=browser --title='select your browser' FALSE "chromium" TRUE "firefox" FALSE "google-chrome")
+	$BROWSER $* &
+esac
+

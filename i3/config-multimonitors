@@ -1,0 +1,628 @@
+# i3-config with multi monitors
+# notes : this is a mish-mash of configs originally started on arch with "larbs" and then
+# ubuntu -> regolith -> fedora
+
+# set monitor layout
+exec --no-startup-id xrandr --output DP-1 --right-of eDP-1
+
+# multiple monitors
+# names come from xrandr
+#xrandr -q |grep connected
+#eDP-1 connected primary 1920x1080+2560+0 (normal left inverted right x axis y axis) 344mm x 194mm
+#DP-1 connected 2560x1080+0+0 (normal left inverted right x axis y axis) 798mm x 334mm
+
+set $monitor1 "eDP-1" # built in lcd
+set $monitor2 "DP-1" # lg via HDMI side
+
+###############################################################################
+# Key Mappings
+###############################################################################
+set $mod Mod4
+set $alt Mod1
+set $term --no-startup-id $TERMINAL
+set $rofiTheme ~/.config/rofi/rofi.rasi
+
+# work space assignments - odds on the built in lcd, evens on the lg widescreen
+workspace 1 output eDP-1
+workspace 3 output eDP-1
+workspace 5 output eDP-1
+workspace 7 output eDP-1
+workspace 9 output eDP-1
+workspace 2 output DP-1
+workspace 4 output DP-1
+workspace 6 output DP-1
+workspace 8 output DP-1
+workspace 10 output DP-1
+
+# odd/even
+#workspace $ws1  output $monitor1
+#workspace $ws2  output $monitor2
+#workspace $ws3  output $monitor1
+#workspace $ws4  output $monitor2
+#workspace $ws5  output $monitor1
+#workspace $ws6  output $monitor2
+#workspace $ws7  output $monitor1
+#workspace $ws8  output $monitor2
+#workspace $ws9  output $monitor1
+#workspace $ws10 output $monitor2
+
+
+set $ws1   "1"
+set $ws2   "2"
+set $ws3   "3"
+set $ws4   "4"
+set $ws5   "5"
+set $ws6   "6"
+set $ws7   "7"
+set $ws8   "8"
+set $ws9   "9"
+set $ws10  "10"
+#set $ws11  "11"
+#set $ws12  "12"
+#set $ws13  "13"
+#set $ws14  "14"
+#set $ws15  "15"
+#set $ws16  "16"
+#set $ws17  "17"
+#set $ws18  "18"
+
+###############################################################################
+# Workspace Keys
+# These are the keys which will be used while binding workspace switching
+###############################################################################
+
+set $ws1_key   1
+set $ws2_key   2
+set $ws3_key   3
+set $ws4_key   4
+set $ws5_key   5
+set $ws6_key   6
+set $ws7_key   7
+set $ws8_key   8
+set $ws9_key   9
+set $ws10_key  0
+
+
+###############################################################################
+# Launcher dialogs
+###############################################################################
+
+## Launch // Terminal // <> Enter ##
+bindsym $mod+Return exec $term
+
+## Launch // Browser // <><Shift> w ##
+bindsym $mod+w exec gtk-launch $(xdg-settings get default-web-browser)
+
+## Launch // Application // <> Space ##
+bindsym $mod+space  exec --no-startup-id rofi -show  run -theme $rofiTheme
+
+## Launch // Command // <><Shift> Space ##
+bindsym $mod+Shift+space exec rofi -show run -theme $rofiTheme
+
+## Navigate // Window by Name // <><Ctrl> Space ##  mod+shift+w
+bindsym $mod+shift+w exec rofi -show window -theme $rofiTheme
+
+## Launch // File Search // <><Alt> Space ##
+bindsym $mod+$alt+space exec  rofi -show filebrowser  -theme $rofiTheme
+
+###############################################################################
+# Window and Workspace Navigation
+###############################################################################
+
+## Navigate // Relative Parent // <> a ##/
+bindsym $mod+a focus parent
+
+## Navigate // Relative Child // <> sift+a ##/
+#set_from_resource $i3-wm.binding.focus_child i3-wm.binding.focus_child z
+#bindsym $mod+shift+a focus child
+
+## Navigate // Relative Window // <> ↑ ↓ ← → ##
+#bindsym $mod+Left focus left
+#bindsym $mod+Down focus down
+#bindsym $mod+Up focus up
+#bindsym $mod+Right focus right
+
+## Navigate // Relative Window // <> k j h l ##
+bindsym $mod+h  focus left
+bindsym $mod+j  focus down
+bindsym $mod+k  focus up
+bindsym $mod+l  focus right
+
+## Navigate // Workspaces 1-10 // <> 0..9 ##
+bindsym $mod+$ws1_key workspace number $ws1
+bindsym $mod+$ws2_key workspace number $ws2
+bindsym $mod+$ws3_key workspace number $ws3
+bindsym $mod+$ws4_key workspace number $ws4
+bindsym $mod+$ws5_key workspace number $ws5
+bindsym $mod+$ws6_key workspace number $ws6
+bindsym $mod+$ws7_key workspace number $ws7
+bindsym $mod+$ws8_key workspace number $ws8
+bindsym $mod+$ws9_key workspace number $ws9
+bindsym $mod+$ws10_key workspace number $ws10
+## Navigate // Workspace 11 - 19 // <><Ctrl> 1..9 ##
+bindsym $mod+Ctrl+$ws1_key workspace number $ws11
+bindsym $mod+Ctrl+$ws2_key workspace number $ws12
+bindsym $mod+Ctrl+$ws3_key workspace number $ws13
+bindsym $mod+Ctrl+$ws4_key workspace number $ws14
+bindsym $mod+Ctrl+$ws5_key workspace number $ws15
+bindsym $mod+Ctrl+$ws6_key workspace number $ws16
+bindsym $mod+Ctrl+$ws7_key workspace number $ws17
+bindsym $mod+Ctrl+$ws8_key workspace number $ws18
+bindsym $mod+Ctrl+$ws9_key workspace number $ws19
+
+## Navigate // Next Workspace // <> Tab ##
+bindsym $mod+Tab workspace next
+
+## Navigate // Next Workspace // <><Alt> → ##
+bindsym $mod+$alt+Right workspace next
+
+## Navigate // Next Workspace on Output // <><Ctrl> Tab ##
+bindsym $mod+ctrl+Tab workspace next_on_output
+
+## Navigate // Next Workspace on Output // <><Ctrl> l ##
+bindsym $mod+ctrl+l workspace next_on_output
+
+## Navigate // Previous Workspace // <><Shift> Tab ##
+bindsym $mod+shift+Tab workspace prev
+
+## Navigate // Previous Workspace // <><Alt> ← ##
+bindsym $mod+$alt+Left workspace prev
+
+## Navigate // Previous Workspace on Output // <><Ctrl><Shift> Tab ##
+bindsym $mod+ctrl+shift+Tab  workspace prev_on_output
+
+## Navigate // Previous Workspace on Output // <><Ctrl> h ##
+bindsym $mod+ctrl+h workspace prev_on_output
+
+## Navigate // Next Free Workspace // <> \ ##
+#bindsym $mod+| exec --no-startup-id /usr/share/i3xrocks/next-workspace --startnum 1
+
+## Navigate // Scratchpad // <> z ##
+bindsym $mod+z scratchpad show
+
+## Modify // Move to Scratchpad // <> shift+z m ##
+bindsym $mod+shift+z move to scratchpad
+
+###############################################################################
+# Window and Workspace Configuration
+###############################################################################
+
+## Modify // Window Position // <><Shift> ↑ ↓ ← → ##
+#bindsym $mod+Shift+Left move left
+#bindsym $mod+Shift+Down move down
+#bindsym $mod+Shift+Up move up
+#bindsym $mod+Shift+Right move right
+
+## Modify // Window Position // <><Shift> k j h l ##
+bindsym $mod+shift+h move left
+bindsym $mod+shift+j move down
+bindsym $mod+shift+k move up
+bindsym $mod+shift+l move right
+
+## Modify // Containing Workspace // <><Ctrl><Shift> ↑ ↓ ← → ##
+#bindsym $mod+Ctrl+Shift+Left move workspace to output left
+#bindsym $mod+Ctrl+Shift+Down move workspace to output down
+#bindsym $mod+Ctrl+Shift+Up move workspace to output up
+#bindsym $mod+Ctrl+Shift+Right move workspace to output right
+
+## Modify // Containing Workspace // <><Ctrl><Shift> k j h l ##
+bindsym $mod+ctrl+shift+h move workspace to output left
+bindsym $mod+ctrl+shift+j move workspace to output down
+bindsym $mod+ctrl+shift+k move workspace to output up
+bindsym $mod+ctrl+shift+l move workspace to output right
+
+## Modify // Vertical Window Orientation // <> v ##
+#bindsym $mod+v split vertical
+
+## Modify // Horizontal Window Orientation // <> g ##
+bindsym $mod+g split horizontal
+
+## Modify // Toggle Window Orientation // <> t ##
+bindsym $mod+t split toggle
+
+## Modify // Window Fullscreen Toggle // <> f ##
+bindsym $mod+f fullscreen toggle
+
+## Modify // Window Floating Toggle // <><Shift> f ##
+bindsym $mod+Shift+f floating toggle
+
+
+## Modify // Tile/Float Focus Toggle // <><Shift> t ##
+#bindsym $mod+shift+t focus mode_toggle
+
+## Modify // Window Layout Mode // <> t ##
+#set_from_resource $i3-wm.binding.layout_mode i3-wm.binding.layout_mode t
+#bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
+
+## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##
+bindsym $mod+Shift+$ws1_key move container to workspace number $ws1
+bindsym $mod+Shift+$ws2_key move container to workspace number $ws2
+bindsym $mod+Shift+$ws3_key move container to workspace number $ws3
+bindsym $mod+Shift+$ws4_key move container to workspace number $ws4
+bindsym $mod+Shift+$ws5_key move container to workspace number $ws5
+bindsym $mod+Shift+$ws6_key move container to workspace number $ws6
+bindsym $mod+Shift+$ws7_key move container to workspace number $ws7
+bindsym $mod+Shift+$ws8_key move container to workspace number $ws8
+bindsym $mod+Shift+$ws9_key move container to workspace number $ws9
+bindsym $mod+Shift+$ws10_key move container to workspace number $ws10
+## Modify // Move Window to Workspace 11 - 19// <><Ctrl><Shift> 1..9 ##
+bindsym $mod+Shift+Ctrl+$ws1_key move container to workspace number $ws11
+bindsym $mod+Shift+Ctrl+$ws2_key move container to workspace number $ws12
+bindsym $mod+Shift+Ctrl+$ws3_key move container to workspace number $ws13
+bindsym $mod+Shift+Ctrl+$ws4_key move container to workspace number $ws14
+bindsym $mod+Shift+Ctrl+$ws5_key move container to workspace number $ws15
+bindsym $mod+Shift+Ctrl+$ws6_key move container to workspace number $ws16
+bindsym $mod+Shift+Ctrl+$ws7_key move container to workspace number $ws17
+bindsym $mod+Shift+Ctrl+$ws8_key move container to workspace number $ws18
+bindsym $mod+Shift+Ctrl+$ws9_key move container to workspace number $ws19
+
+# move focused container to workspace, move to workspace
+## Modify // Carry Window to Workspace 1 - 10// <><Alt> 0..9 ##
+bindsym $mod+$alt+$ws1_key move container to workspace number $ws1; workspace number $ws1
+bindsym $mod+$alt+$ws2_key move container to workspace number $ws2; workspace number $ws2
+bindsym $mod+$alt+$ws3_key move container to workspace number $ws3; workspace number $ws3
+bindsym $mod+$alt+$ws4_key move container to workspace number $ws4; workspace number $ws4
+bindsym $mod+$alt+$ws5_key move container to workspace number $ws5; workspace number $ws5
+bindsym $mod+$alt+$ws6_key move container to workspace number $ws6; workspace number $ws6
+bindsym $mod+$alt+$ws7_key move container to workspace number $ws7; workspace number $ws7
+bindsym $mod+$alt+$ws8_key move container to workspace number $ws8; workspace number $ws8
+bindsym $mod+$alt+$ws9_key move container to workspace number $ws9; workspace number $ws9
+bindsym $mod+$alt+$ws10_key move container to workspace number $ws10; workspace number $ws10
+## Modify // Carry Window to Workspace 11 - 19 // <><Alt><Ctrl> 1..9 ##
+bindsym $mod+$alt+Ctrl+$ws1_key move container to workspace number $ws11; workspace number $ws11
+bindsym $mod+$alt+Ctrl+$ws2_key move container to workspace number $ws12; workspace number $ws12
+bindsym $mod+$alt+Ctrl+$ws3_key move container to workspace number $ws13; workspace number $ws13
+bindsym $mod+$alt+Ctrl+$ws4_key move container to workspace number $ws14; workspace number $ws14
+bindsym $mod+$alt+Ctrl+$ws5_key move container to workspace number $ws15; workspace number $ws15
+bindsym $mod+$alt+Ctrl+$ws6_key move container to workspace number $ws16; workspace number $ws16
+bindsym $mod+$alt+Ctrl+$ws7_key move container to workspace number $ws17; workspace number $ws17
+bindsym $mod+$alt+Ctrl+$ws8_key move container to workspace number $ws18; workspace number $ws18
+bindsym $mod+$alt+Ctrl+$ws9_key move container to workspace number $ws19; workspace number $ws19
+
+## Modify // Carry Window to Next Free Workspace // <><Shift> ` ##
+#set_from_resource $i3-wm.binding.take_next_free i3-wm.binding.take_next_free Mod1+grave
+#bindsym $mod+$i3-wm.binding.take_next_free exec --no-startup-id /usr/share/i3xrocks/next-workspace --startnum 1 --move-window-and-follow
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Hiding borders adjacent to the screen edges.
+# The "smart" setting hides borders on workspaces with only one window visible.
+hide_edge_borders smart
+
+###############################################################################
+# Session Management
+###############################################################################
+
+## Session // Exit App // <><Shift> q ##
+bindsym $mod+shift+q [con_id="__focused__"] kill
+
+## Session // Terminate App // <><Alt> q ##
+bindsym $mod+q [con_id="__focused__"] exec --no-startup-id kill -9 $(xdotool getwindowfocus getwindowpid)
+
+## Session // Reload i3 Config // <><Shift> c ##
+bindsym $mod+shift+c reload
+
+## Session // Refresh Session // <><Shift> r ##
+bindsym $mod+shift+r  restart
+
+## Session // Restart i3 // <><Ctrl> r ##
+bindsym $mod+ctrl+r  restart
+
+## Session // Logout // <><Shift> e ##
+bindsym $mod+shift+e exec /home/glaw/bin/logout
+
+## Session // Reboot // <><Shift> b ##   -- DISABLED - too many bad keystrokes
+#bindsym $mod+shift+b exec systemctl -i reboot
+
+## Session // Power Down // <><Shift> p ##   -- DISABLED - too many bad keystrokes
+#bindsym $mod+shift+p exec systemctl -i poweroff
+
+## Session // Lock Screen // <> shift+Escape ## --DISABLED
+#bindsym $mod+shift+escape exec $i3-wm.program.lock
+
+## Session // Sleep // <><Shift> s ##
+#bindsym $mod+shift+s exec systemctl -i suspend
+bindsym $mod+shift+s exec xfce4-screenshooter
+
+###############################################################################
+# System Management
+###############################################################################
+
+## Modify // Settings // <> c ##
+bindsym $mod+c  exec xfce4-settings-manager
+
+## Modify // Display Settings // <> d ##
+bindsym $mod+d  exec xfce4-display-settings
+
+## Modify // Network Settings // <> w ## --
+bindsym $mod+n exec /usr/bin/nm-connection-editor
+
+## Modify // Bluetooth Settings // <> b ##
+bindsym $mod+b exec /home/glaw/bin/Bit*.AppImage
+bindsym $mod+shift+b exec blueman-manager
+
+## Launch // File Browser - Ranger // <> r ##
+bindsym $mod+r          exec $term sh -c  "sudo ranger"
+
+## Launch // Notification Viewer // <> shift+n ##
+bindsym --release $mod+shift+d exec dunstctl history-pop
+
+###############################################################################
+# Workspace Management
+###############################################################################
+
+# Toggle bar visibility
+## Modify // Toggle Bar // <> i ##
+bindsym $mod+i bar mode toggle
+
+# Cause Settings app to float above tiled windows
+floating_maximum_size -1 x -1
+
+workspace_auto_back_and_forth no
+
+###############################################################################
+# Window Resize and Gaps
+###############################################################################
+
+# mod+arrows to resize
+bindsym Mod1+Up    resize shrink height 10 px or 1 ppt
+bindsym Mod1+Down  resize grow   height 10 px or 1 ppt
+bindsym Mod1+Left  resize shrink width  10 px or 1 ppt
+bindsym Mod1+Right resize grow   width  10 px or 1 ppt
+
+
+###############################################################################
+# i3 Appearance and Behavior
+###############################################################################
+
+# Disable titlebar
+default_border pixel 1
+default_floating_border pixel 1
+
+# Specify the distance between windows in pixels. (i3-gaps)
+gaps inner 5
+gaps outer 0
+
+# Only enable gaps on a workspace when there is at least one container
+smart_gaps on
+
+# Enable popup during fullscreen
+popup_during_fullscreen smart
+
+# window focus follows your mouse movements as the mouse crosses window borders
+focus_follows_mouse yes
+
+###############################################################################
+# i3 Colors and Fonts
+###############################################################################
+
+# Create variables from Xresources for i3's look.
+set $focused.color.border "#002b36"
+set $focused.color.background "#586e75"
+set $focused.color.text "#fdf6e3"
+set $focused.color.indicator "#FFFFFF"
+set $focused.color.child_border 1
+set $focused_inactive.color.border "#002b36"
+set $focused_inactive.color.background "#073642"
+set $focused_inactive.color.text "#839496"
+set $focused_inactive.color.indicator "#FFFFFF"
+set $focused_inactive.color.child_border 1
+set $unfocused.color.border "#002b36"
+set $unfocused.color.background "#073642"
+set $unfocused.color.text "#839496"
+set $unfocused.color.indicator "#FFFFFF"
+set $unfocused.color.child_border 1
+set $urgent.color.border "#002b36"
+set $urgent.color.background "#dc322f"
+set $urgent.color.text "#fdf6e3"
+set $urgent.color.indicator "#FFFFFF"
+set $urgent.color.child_border 1
+
+
+# Window Border color
+# class                 border                             background                         text                               indicator                          child_border
+#client.focused          $focused.color.border              $focused.color.background          $focused.color.text                $focused.color.indicator           $focused.color.child_border
+#client.focused_inactive $focused_inactive.color.border     $focused_inactive.color.background $focused_inactive.color.text       $focused_inactive.color.indicator  $focused_inactive.color.child_border
+#client.unfocused        $unfocused.color.border            $unfocused.color.background        $unfocused.color.text              $unfocused.color.indicator         $unfocused.color.child_border
+#client.urgent           $urgent.color.border               $urgent.color.background           $urgent.color.text                 $urgent.color.indicator            $urgent.color.child_border
+
+# Create variables from Xresources for i3bars's look.
+set $i3-wm.bar.background.color "#002b36"
+set $i3-wm.bar.statusline.color "#93a1a1"
+set $i3-wm.bar.separator.color "#268bd2"
+
+set $i3-wm.bar.workspace.focused.border.color "#073642"
+set $i3-wm.bar.workspace.focused.background.color "#073642"
+set $i3-wm.bar.workspace.focused.text.color "#eee8d5"
+
+set $i3-wm.bar.workspace.active.border.color "#073642"
+set $i3-wm.bar.workspace.active.background.color "#073642"
+set $i3-wm.bar.workspace.active.text.color "#586e75"
+
+set $i3-wm.bar.workspace.inactive.border.color "#002b36"
+set $i3-wm.bar.workspace.inactive.background.color "#002b36"
+set $i3-wm.bar.workspace.inactive.text.color "#586e75"
+
+set $i3-wm.bar.workspace.urgent.border.color "#dc322f"
+set $i3-wm.bar.workspace.urgent.background.color "#dc322f"
+set $i3-wm.bar.workspace.urgent.text.color "#fdf6e3"
+
+# Sets i3 font for dialogs
+set $i3-wm.font pango:Source Code Pro Medium 13
+font $i3-wm.font
+
+###############################################################################
+# i3 Bar
+###############################################################################
+
+set $i3-wm.bar.position bottom
+set $i3-wm.bar.font pango:Source Code Pro Medium 13, Material Design Icons 13
+set $i3-wm.bar.separator " "
+set $i3-wm.bar.trayoutput primary
+set $i3-wm.bar.stripworkspacenumbers yes
+set $i3-wm.bar.mode dock
+
+# The bar configuration
+bar {
+  tray_output none
+  position $i3-wm.bar.position
+  mode $i3-wm.bar.mode
+  font $i3-wm.bar.font
+  separator_symbol $i3-wm.bar.separator
+  status_command i3blocks
+  strip_workspace_numbers $i3-wm.bar.stripworkspacenumbers
+
+  colors {
+      background $i3-wm.bar.background.color
+      statusline $i3-wm.bar.statusline.color
+      separator  $i3-wm.bar.separator.color
+
+#                        BORDER  BACKGROUND TEXT
+      focused_workspace  $i3-wm.bar.workspace.focused.border.color      $i3-wm.bar.workspace.focused.background.color   $i3-wm.bar.workspace.focused.text.color
+      active_workspace   $i3-wm.bar.workspace.active.border.color       $i3-wm.bar.workspace.active.background.color    $i3-wm.bar.workspace.active.text.color
+      inactive_workspace $i3-wm.bar.workspace.inactive.border.color     $i3-wm.bar.workspace.inactive.background.color  $i3-wm.bar.workspace.inactive.text.color
+      urgent_workspace   $i3-wm.bar.workspace.urgent.border.color       $i3-wm.bar.workspace.urgent.background.color    $i3-wm.bar.workspace.urgent.text.color
+  }
+}
+
+###############################################################################
+# External programs launched with i3
+###############################################################################
+
+# Load nm-applet to provide auth dialogs for network access / VPN
+exec --no-startup-id dbus-launch /usr/bin/nm-applet
+
+# custom stuff brought forward
+bindsym $mod+Shift+i        exec --no-startup-id i3resize up
+bindsym $mod+Shift+o        exec --no-startup-id i3resize right
+bindsym $mod+Shift+u        exec --no-startup-id i3resize down
+bindsym $mod+Shift+y        exec --no-startup-id i3resize left
+
+# obsidian - wild card to allow for appimage updates
+bindsym $mod+o          exec --no-startup-id /home/glaw/bin/Obsidian*.AppImage
+
+# rofi ssh popup
+bindsym $mod+y      exec --no-startup-id rofi -show ssh -terminal terminator -theme $rofiTheme -config ~/.config/rofi/config.rasi.i3
+
+# use VIM keys
+set $up h
+set $down j
+set $left k
+set $right l
+set $term --no-startup-id $TERMINAL
+
+# emoji selector
+bindsym $mod+grave      exec --no-startup-id "rofimoji -a type -a copy"
+
+
+# 6/12/2022 - adjust for fedora, was up 5, up 15
+bindsym $mod+equal      exec --no-startup-id lmc up 1
+bindsym $mod+Shift+equal exec --no-startup-id lmc up 5
+bindsym $mod+minus      exec --no-startup-id lmc down 1
+bindsym $mod+Shift+minus    exec --no-startup-id lmc down 5
+bindsym $mod+Shift+m        exec --no-startup-id lmc mute
+
+bindsym $mod+p          exec --no-startup-id pithos
+
+# start up
+
+#exec --no-startup-id i3-msg "workspace 1; exec $term"
+exec --no-startup-id compton
+exec --no-startup-id /usr/bin/synergyc -f --no-tray --debug INFO --name rh-laptop --prevent-sleep --log /home/glaw/synergy.log 192.168.29.16:24800 &
+exec --no-startup-id slack
+# 2 polybars, one on each monitor
+exec --no-startup-id MONITOR=eDP-1 polybar -r -q geolaw
+exec --no-startup-id MONITOR=DP-1 polybar -r -q geolaw2
+
+exec --no-startup-id xfce4-clipman
+exec --no-startup-id kitty --class=kitty-scratch
+exec --no-startup-id firefox
+exec --no-startup-id lxpolkit
+exec --no-startup-id udiskie -ans
+
+#full screenshot
+bindsym Print exec scrot /Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.jpg
+# current window
+bindsym $mod+Print exec scrot -u /Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.jpg
+# select
+bindsym --release $mod+Shift+Print exec scrot --select /Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.jpg
+# select and copy
+bindsym --release $mod+ctrl+Print  exec scrot --select -e 'xclip -selection clipboard -t image/png -i $f' /Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.jpg
+
+
+# enable floating on certain windows
+for_window [class="floating_window"] floating enable
+for_window [title="Terminator Preferences"] floating enable
+# float the weather popup window
+for_window [class="weather" ] floating enable
+for_window [window_role="Dialog"] floating enable
+for_window [class="Xournal"] floating enable
+for_window [class="mpv"] floating enable
+for_window [class="cheese"] floating enable
+for_window [class="Cheese"] floating enable
+for_window [class="Virt-manager"] floating enable
+for_window [class="Virt-viewer"] floating enable
+for_window [class="pithos"] floating enable
+for_window [class="Pithos"] floating enable
+for_window [class="Io.github.celluloid_player.Celluloid"] floating enable
+for_window [class="io.github.celluloid_player.Celluloid"] floating enable
+
+for_window [class="Geany"] floating enable
+for_window [class="obsidian"] floating enable
+for_window [class="Gedit"] floating enable
+for_window [class="Clementine" ] floating enable
+
+for_window [class="gnome-calendar"] floating enable
+for_window [class="Thunderbird"] floating enable
+for_window [class="gnome-control-center"] floating enable
+for_window [class="Terminator" title="calendar"] floating enable
+
+
+for_window [class="Zathura"] floating enable
+for_window [class="news"] floating enable
+for_window [class="Audacious"] floating enable
+for_window [class="thunderbird"] floating enable
+
+# Work space assignments
+# terminal on ws1 (or whereever)
+
+# Browsers on ws2 -- note - only the window_role=browser to move to ws, this lets the window be moved to another ws and the dialog popups will follow
+assign [class="(?i)(?:firefox)"]  $ws2
+assign [class="(?i)(?:Google-chrome)"]  $ws2
+for_window [class="Firefox" window_role="browser"] move to workspace $ws2
+# put all browsers on ws2 :
+for_window [window_role="browser"] move to workspace $ws2
+for_window [class="Opera"] move to workspace $ws2
+for_window [class="Chromium"] move to workspace $ws2
+for_window [class="Midori"] move to workspace $ws2
+
+# chat on WS3 - slack
+for_window [class="Slack"] move to workspace $ws3
+
+# Music on WS4
+for_window [class="webex"] move to workspace $ws4
+for_window [title="term_ncmpc"] move to workspace $ws4
+for_window [class="Music"] move to workspace $ws4
+for_window [class="Rhythmbox"] move to workspace $ws4
+for_window [class="Clementine" ] move to workspace $ws4
+
+# ws5 for remote desktop/vnc
+for_window [class="Vinagre"] move to workspace $ws5
+for_window [class="vinagre"] move to workspace $ws5
+for_window [class="Remote Desktop Viewer"] move to workspace $ws5
+for_window [title="RHKVM"] move to workspace $ws5 floating disable
+
+# Images/Video on WS6
+for_window [title="GIMP Startup"] move workspace $ws6
+for_window [class="Gimp"] move workspace $ws6
+
+for_window [class="kitty-scratch"] move scratchpad
+for_window [class="kitty-news"] floating enable
+
+for_window [class="Bitwarden"] move to scratchpad
+
+bindsym $mod+v exec "i3-msg workspace 5; exec virt-viewer RH"
+exec --no-startup-id xscreensaver
+exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpaper/*
+
