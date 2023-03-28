@@ -1,8 +1,13 @@
 #!/bin/bash
 
 IFS="$(printf '\n\t')"
-# $1 = source
-# $2 = dest
+# $1 = source template
+# $2 = dest vm name
+# $3 = optional sub directory - e.g. cluster name to group all vms within a cluster.
+
+# your base directory for your kvm vms
+base_dir="/data/libvirtd_images"
+cd $base_dir
 error=0
 if [ "$1" == "" ]; then
     error=1
@@ -14,31 +19,28 @@ if [ "$2" == "" ]; then
     error_str+="Destination vm name is required"
 fi
 
+# validate $1 - does not need to be -template as we want to be able to clone a full existing machine
+virsh list --all |grep $1 > /dev/null
+if [ "$?" == "1" ]; then
+    error_str="Template $1 does not exist. Templates should have dashes and not _"
+    error=1
+fi
+
+echo $2 |grep '_' > /dev/null
+if [ "$?" == "0" ]; then
+    error_str="destination VM names should have dashes and not _"
+    error=1
+fi
 if [ $error -gt 0 ]; then
     echo $error_str
     exit;
 fi
 
-
-base_dir="/Downloads/libvirt_images"
-cd $base_dir
-# validate $1
-virsh list --all |grep template |grep $1 > /dev/null
-if [ "$?" == "1" ]; then
-    echo "Template $1 does not exist. Templates should have dashes and not _"
-    exit
-fi
-
 # if $3 is set, make it first, then cd into it.
-# e.g. $3 = testcluster, we want /Downloads/images/testcluster/vm_name
+# e.g. $3 = testcluster, we want /data/images/testcluster/vm_name
 if [ "$3" != "" ]; then
     mkdir $3
     cd $3
-fi
-echo $2 |grep '_' > /dev/null
-if [ "$?" == "0" ]; then
-    echo "destination VM names should have dashes and not _"
-    exit
 fi
 
 # first make a new directory for the vms disks - this colsolidates them all to keep them together
@@ -54,32 +56,21 @@ echo "Working directory is `pwd`"
 # -- ALL disks reside in the same directory
 # -- cd to the directory where the disk images should be created
 # -- using the source from dumpxml, the virt-clone command gets created with the full path to all disk files
-#
+# need to dynamically generate a command like this :
 # virt-clone --original rhcs50-node01 --name rhcs50-admin --file /path/to/vms/$2/rhcs50-admin1.qcow2 --file /path/to/vms/$2/rhcs50-admin2.qcow2 --file /path/to/vms/$2/rhcs50-admin3.qcow2 --file /path/to/vms/$2/rhcs50-admin4.qcow2
 
 # need to dynamically figure out how many disks we need based on the original vm
-#echo "Source vm $1 original disks :"
-#virsh dumpxml $1 |grep 'source file.*qcow'
 cmd_string="virt-clone --original $1 --name $2 "
 for i in $(virsh dumpxml $1 |grep 'source file.*qcow'); do
-    new=$(echo $i|sed "s/.*'\(\/Downloads\/libvirt_images.*\)'.*/\1/" | sed "s%$1%$2%g")
+    echo "$i   s/.*'\($base_dir.*\)'.*/\1/"
+    new=$(echo $i|sed "s%.*'\(${base_dir}.*\)'.*%\1%" | sed "s%$1%$2%g")
     if [ "$3" != "" ]; then
         # do an additional sed, change the first occurance to $3/$2/
-    # /Downloads/libvirt_images/rhel86-test-node01/rhel86-test-node01-root.qcow2
         new=$(echo $new | sed "s/$2/$3\/$2/");
     fi
-    # /Downloads/libvirt_images/test/rhel86-test-node01/rhel86-test-node01-root.qcow2
-    #new=$(echo $i|sed "s/.*'\(/Downlads/libvirt_images.*\)'.*/\1/"|sed "s/$1/$2/g")
-    echo $new
     cmd_string="$cmd_string --file $new"
 done
 
-#num_disks=$(virsh dumpxml $1 |grep 'source file.*qcow' |wc -l);
-#disk_string=""
-#for (( c=1; c<=$num_disks; c++ )); do
-#    #for i in {seq 1 $num_disks}; do
-#    disk_string+=" --file $2_$c.qcow2"
-#done
-#echo "$cmd_string"
-eval $cmd_string
-#virt-clone --original "$1" --name "$2" "$disk_string"
+echo "$cmd_string"
+eval "$cmd_string"
+
