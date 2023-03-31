@@ -4,14 +4,35 @@ These are scripts I wrote to speed up deployment and management of kvm
 virtualized ceph clusters based off template vms
 
 ## template vms
-- all configured on the same IP for update-ceph to be able to access
-- configured with ssh key from the host machine
-- configured with ssh key from itself
-- basic format :   rhel91-template  : rhel 9.1
-                   rhel86-template  : rhel 8.6
-- registered and up to date , may need to be re-registered when used.
-- rhel9 based - root ssh enabled
-- ssh config - wild cards rhel91-* so user=root
+* all configured on the same IP for update-ceph to be able to access
+* configured with ssh key from the host machine
+* configured with ssh key from itself
+* basic format :    rhel91-template  : rhel 9.1
+                    rhel86-template  : rhel 8.6
+* registered and up to date , may need to be re-registered when used.
+* rhel9 based - root ssh enabled
+* ssh config - wild cards rhel91-* so user=root
+
+Template vms use 'network2' which is defined as :  templates all configured on
+192.168.56.254
+
+$ virsh net-dumpxml network2
+<network connections='5'>
+  <name>network2</name>
+  <uuid>1a6ba3a8-77f7-42c2-9569-480a8ef5228f</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:06:2b:d6'/>
+  <domain name='network2'/>
+  <ip address='192.168.56.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.56.128' end='192.168.56.254'/>
+    </dhcp>
+  </ip>
 
 ## Clone my rhel91-template out to 5 cluster nodes :
 ```
@@ -62,7 +83,8 @@ uid=0(root) gid=0(root) groups=0(root) context=unconfined_u:unconfined_r:unconfi
 ```
 
 
- virsh list
+```
+$ virsh list
  Id   Name                   State
 --------------------------------------
  1    rhel91-rhcs53-admin    running
@@ -70,32 +92,40 @@ uid=0(root) gid=0(root) groups=0(root) context=unconfined_u:unconfined_r:unconfi
  3    rhel91-rhcs53-node02   running
  4    rhel91-rhcs53-node03   running
  5    rhel91-rhcs53-proxy    running
+ ```
 
 ## start-ceph examples
 
- start-ceph ssh rhel91-rhcs53 "subscription-manager repos --enable=rhceph-5-tools-for-rhel-8-x86_64-rpms"
+$ start-ceph ssh rhel91-rhcs53  -- does a interactive ssh loop through the whole
+cluster
+
+runs a command against all nodes
+$ start-ceph ssh rhel91-rhcs53 "subscription-manager repos --enable=rhceph-5-tools-for-rhel-8-x86_64-rpms"
 
 ## ceph install
+
 ssh to node01 :
 [root@rhel91-rhcs53-node01 ~]$ cephadm bootstrap --cluster-network 192.168.56.0/24 --mon-ip 192.168.56.21 --registry-url registry.redhat.io --registry-username glaw@redhat.com --registry-password 1210W\!llis --yes-i-know --skip-mon-network
 
 Don't forget to adding public_network before adding any additional monitors
 [ceph: root@rhel91-rhcs53-node01 /]# ceph config set mon public_network 192.168.56.0/24
+
+The can add more mons
 # ceph orch daemon add mon "rhel91-rhcs53-node02 rhel91-rhcs53-node03 rhel91-rhcs53-admin rhel91-rhcs53-proxy"
 
 ## Additional ideas
 - based on the destination vm name in clonevm - when running update-ceph, grab the matchine string from host's /etc/hosts to pre-populate the vms /etc/hosts file
 
 ## clone existing cluster
-e.g. take existing rhel91-rhcs53 cluster, make a clone in the rhcs53-6up sub
-directory for upgrade testing
+e.g. take existing rhel91-rhcs53 cluster, make a clone in the rhcs53-6up sub-directory for upgrade testing
 
-1847  clonevm rhel91-rhcs53-node01 rhel91-rhcs53u-node01 rhcs53-6up
- 1848  vi ~/bin/clonevm
- 1849  clonevm rhel91-rhcs53-node01 rhel91-rhcs53u-node01 rhcs53-6up
- 1850  clonevm rhel91-rhcs53-node02 rhel91-rhcs53u-node02 rhcs53-6up
- 1851  clonevm rhel91-rhcs53-node03 rhel91-rhcs53u-node03 rhcs53-6up
- 1852  clonevm rhel91-rhcs53-proxy rhel91-rhcs53u-proxy rhcs53-6up
+```
+$ clonevm rhel91-rhcs53-node01 rhel91-rhcs53u-node01 rhcs53-6up
+$ clonevm rhel91-rhcs53-node01 rhel91-rhcs53u-node01 rhcs53-6up
+$ clonevm rhel91-rhcs53-node02 rhel91-rhcs53u-node02 rhcs53-6up
+$ clonevm rhel91-rhcs53-node03 rhel91-rhcs53u-node03 rhcs53-6up
+$ clonevm rhel91-rhcs53-proxy rhel91-rhcs53u-proxy rhcs53-6up
+```
 
 NOTE! - need to be careful doing this as the clone cluster will also have all
 of the same IP addresses -- cannot run both clusters at the same time
