@@ -1,33 +1,34 @@
-#!/usr/bin/bash
+#!/usr/bin/bash 
 
-if [ -z $1 ]; then
+function usage() {
     echo "Usage: $0 -p _pattern_ -o output_dir"
     echo "will get all container logs for pod matching _pattern_"
     echo "Output is to stdout unless -o is specified"
     echo
     echo "skips pods matching replicaset and deployment as omg is unable to extract those logs"
-    exit;
-fi
+}
 
-which omg > /dev/null
-if [ "$?" != "0" ]; then
-    echo "Requires omg installed and on the PATH"
-    exit;
+if [ -z $1 ]; then
+	usage
+	exit;
 fi
-
 # get the options - watch for -p for the pod name and -o for output directory
 
 until [[ -z $1  ]]; do
     case $1 in
         -o)  output_dir=$2; shift ;;
-        -p)  pod_pattern="$2"; shift ;;
+        -p)  pod_pattern="$2"; shift ;;    # add the -p to the passed value
     esac
     shift
 done
 
-
-# $pod_patterm will be some base pod string that we want to capture logs from
-pods=$(omg get all |grep $pod_pattern |awk '{print $1}'|egrep -v 'replicaset|deployment');
+if [ "$pod_pattern" == "" ]; then
+	usage
+	echo "Error: no pod_pattern specified - please pass -p <PATTERN>"
+	exit;
+fi
+# $1 will be some base pod string that we want to capture logs from
+pods=$(omg get pods -A|grep $pod_pattern |awk '{print $2}'|egrep -v 'replicaset|deployment');
 
 echo "Will capture all oc logs for pods :"
 echo "	$pods   "
@@ -48,37 +49,38 @@ for p in $pods; do
         base_outfile="${output_dir}/"$(echo ${p}|sed "s/\//_/g")
         events_output=${base_outfile}"_events"
         echo "Capturing events for pod ${p} to ${events_output}"
-        omg get events | grep $p > ${events_output}
+        omg get events -A | grep $p > ${events_output}
     else
         echo "------------------------- events from pod $p -------------------------"
-        omg get events | grep $p
+        omg get events  -A| grep $p 
     fi
 
     # get the base list of containers within the pod
-    # e.g. omg logs $1 will return the following error
+    # e.g. omg logs $1 will return the following error 
     #[ERROR] This pod has more than one containers: ['blkdevmapper', 'log-collector', 'expand-bluefs', 'osd', 'chown-container-data-dir'] Use -c/--container to specify the container
 
     containers=$(omg logs $p  |grep "\['"|sed "s/\[\('.*'\)\].*/\1/" |sed -e "s/'//g" -e "s/,//g");
-    if [ "$containers" != "" ]; then
+    if [ "$containers" != "" ]; then 
         for c in $containers; do
             if [ "$output_dir" != "" ]; then
                 container_output=${base_outfile}"_$c"
                 echo "Capturing logs from pod $p container $c to ${container_output}"
-                omg logs $p -c $c > ${container_output}
+                    omg logs $p -c $c -A> ${container_output}
             else
                 echo "------------------------- pod $p container $c -------------------------"
-                omg logs $p -c $c
+                    omg logs $p -c $c -A
             fi
         done
     else
         if [ "$output_dir" != "" ]; then
             pod_output=${base_outfile}"_pod"
             echo "Capturing logs from pod $p to ${pod_output}"
-            omg  logs $p > ${pod_output}
+                   omg  logs $p -A > ${pod_output}
         else
             echo "------------------------- pod $p -------------------------"
-            omg  logs $p
+                   omg  logs $p -A
         fi
     fi
 done
+
 
