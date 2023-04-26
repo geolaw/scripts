@@ -6,7 +6,7 @@ within a pod.
 $ oc logs pod/rook-ceph-osd-7-7ccdbcd4f4-nxfv5 --all-containers
 
 omg lacks the --all-containers option, but 'omg_all_logs' extends omg to allow
-all containers.
+all containers.  Updated to also capture the previous log if it exists.
 
 #### Usage :
 ```
