@@ -1,4 +1,4 @@
-#!/usr/bin/bash 
+#!/usr/bin/bash
 
 function usage() {
     echo "Usage: $0 -p _pattern_ -o output_dir"
@@ -52,15 +52,15 @@ for p in $pods; do
         omg get events -A | grep $p > ${events_output}
     else
         echo "------------------------- events from pod $p -------------------------"
-        omg get events  -A| grep $p 
+        omg get events  -A| grep $p
     fi
 
     # get the base list of containers within the pod
-    # e.g. omg logs $1 will return the following error 
+    # e.g. omg logs $1 will return the following error
     #[ERROR] This pod has more than one containers: ['blkdevmapper', 'log-collector', 'expand-bluefs', 'osd', 'chown-container-data-dir'] Use -c/--container to specify the container
 
     containers=$(omg logs $p  |grep "\['"|sed "s/\[\('.*'\)\].*/\1/" |sed -e "s/'//g" -e "s/,//g");
-    if [ "$containers" != "" ]; then 
+    if [ "$containers" != "" ]; then
         for c in $containers; do
             if [ "$output_dir" != "" ]; then
                 container_output=${base_outfile}"_$c"
@@ -83,4 +83,7 @@ for p in $pods; do
     fi
 done
 
+if [ "$output_dir" != "" ]; then
+    chmod -R 755 $output_dir
+fi
 
