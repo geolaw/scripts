@@ -15,9 +15,9 @@
 
 if [ "$1" == "" ]; then
     echo "Usage :   start-ceph <start|stop|destroy> <ceph4|ceph5|ceph4-79|rhcs5>"
-            echo "rhcs3 rhcs51 rhcs50 ceph5 ceph4-79 ceph4 rhcs4-rhel79"
-            echo "checking for running cephs"
-            virsh list |egrep 'rhcs|ceph'
+            echo "rhcs3 rhcs51 rhcs50 ceph5 ceph4-79 ceph4 rhcs4-rhel79 rhel87-cluster1"
+            echo "checking for running cephs or cluster"
+            virsh list |egrep 'rhcs|ceph|rhel'
     exit;
 fi
 
@@ -75,11 +75,16 @@ case "$2" in
 	    vms="rhcs51-admin rhcs51-node01 rhcs51-node02 rhcs51-node03 "
 	    node01="rhcs51-node01"
 	;;
-	*)
-	    echo "No ceph environement specified"
+        rhel87-cluster1)
+            # pacemaker cluster example  - 2 lines to configure vms should be a list of all cluster nodes, node01 should be the "master" node (left over from ceph)
+	    vms="rhel87-cluster1-node1 rhel87-cluster1-node3 rhel87-cluster1-node3 "
+	    node01="rhel87-cluster1-node1"
+	;;
+        *)
+	    echo "No ceph environement specified"  # <<<<< again, edit to match your setup, "ceph" could be "cluster"
             echo "rhcs51 rhcs50  ceph5 ceph4-79 ceph4 rhcs4-rhel79"
-            echo "checking for running cephs"
-            virsh list |egrep 'rhcs|ceph'
+            echo "checking for running cephs "
+            virsh list |egrep 'rhcs|ceph|rhel'
 	    exit;
 	;;
 esac
@@ -91,7 +96,7 @@ if [ "$action" == "ssh" ]; then
         echo
     done
 else
-# special case
+# special case <<<<<<< left over from ceph ... so could use some logic to do a `pcs status --full` or something if $2 contains "cluster"
 if [ "$action" == "status" ]; then
     echo "Checking ceph status on $node01"
     ssh $node01 ceph -s
